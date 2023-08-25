@@ -1,0 +1,412 @@
+/*
+ ============================================================================
+ Name        : Clinc_Managemnet_System.c
+ Author      : Abdel Rhman Helal Saleh
+ ============================================================================
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+typedef enum{
+	freee=7  , busy
+}available_slots;
+available_slots slot1=freee,slot2=freee,slot3=freee,slot4=freee,slot5=freee;
+int s1id=0,s2id=0,s3id=0,s4id=0,s5id=0;
+struct node{
+	char name[20];
+	int age;
+	char gender[20];
+	int id;
+	available_slots desired_slot;
+	struct node *next;
+};
+struct node* head = NULL;
+struct node* current = NULL;
+typedef enum{
+	false , true
+}bool;
+
+void start_Screan_admin_mode_Opration(void){
+	printf("\n************************** \n");
+	printf("1. Add new patient record\n");
+	printf("2. Edit patient record\n");
+	printf("3. Reserve a slot with the doctor\n");
+	printf("4. Cancel reservation\n");
+	printf("5. Delete patient\n");
+	printf("\n************************** \n");
+}
+void check_id(int id,bool*flag_id){
+	   if(head==NULL)
+	   {
+	      *flag_id = false;
+	      return;
+	   }
+	   current = head;
+	   while(current != NULL)
+	   {
+	      if(current->id == id)
+	      {
+	         *flag_id = true;
+	         return;
+	      }
+	      current = current->next;
+
+	   }
+	   *flag_id = false;
+}
+void start_Screan_admin_mode(void){
+	int Admin_password , tries = 0;
+	printf("\n****Welcome to Admin section**** \n");
+	printf("Enter the password \n");
+	scanf("%d",&Admin_password);
+	while(Admin_password!=1234 && tries!=2){
+		printf("Enter the password \n");
+		scanf("%d",&Admin_password);
+		tries++;
+		if(tries==2){
+			printf("the system shall close\n");
+			return ;
+		}
+	}
+	start_Screan_admin_mode_Opration();
+}
+void  add_a_new_patient(void){
+	 struct node *link = (struct node*) malloc(sizeof(struct node));
+	 	char name[20],gender[20];
+	 	int age ,id;
+	 	bool flag_id = false;
+		printf("\n************Add New patient section************\n");
+	 	printf("Enter the name \n");
+	 	fflush(stdin);
+	 	gets(name);
+	 	//scanf("%s",name);
+	 	printf("Enter the id \n");
+	 	scanf("%d",&id);
+	 	check_id(id,&flag_id);
+	 	if(flag_id==true){
+	        printf("\n\n%d ID is already exists choes anthor one \n\n", id);
+	 		return;
+	 	}
+	 	printf("Enter the gender \n");
+	 	fflush(stdin);
+	 	gets(gender);
+	    printf("Enter the age \n");
+	    scanf("%d",&age);
+
+	 	link->id = id;
+	 	for (int var = 0; var < 20; ++var) {
+	 		link->name[var] = name[var];
+	 	    link->gender[var] = gender[var];
+		}
+
+	   link->age = age;
+	   link->desired_slot=-1;
+
+	   link->next = head;
+
+	   head = link;
+	   printf("ADD Successfully");
+}
+
+void Edit_patient_record(){
+	char name[20],gender[20];
+	int age ,id;
+	bool flag_id = false;
+	printf("\n************Edit patient record section************\n");
+	printf("Enter the id \n");
+	scanf("%d",&id);
+	check_id(id,&flag_id);
+	if(flag_id==false){
+		printf("\nincorrect ID message\n\n");
+		return;
+	}
+   if(head==NULL)
+   {
+	  return;
+   }
+   current = head;
+   while(current != NULL)
+   {
+	  if(current->id == id)
+	  {
+		 printf("its old data is : \n");
+		 printf("id : %d\n",current->id);
+		 			  printf("name : %s\n",current->name);
+		 printf("gender : %s\n",current->gender);
+		 printf("age : %d\n",current->age);
+
+		printf("Enter the new name \n");
+		fflush(stdin);
+		gets(name);
+		printf("Enter new the gender \n");
+		fflush(stdin);
+		gets(gender);
+		printf("Enter new the age \n");
+		scanf("%d",&age);
+		for (int var = 0; var < 20; ++var) {
+			current->name[var] = name[var];
+			current->gender[var] = gender[var];
+		}
+		current->age=age;
+		printf("\n\nEdit success");
+		 return;
+	  }
+	  current = current->next;
+   }
+}
+void ALL_Slots(available_slots**slot1,available_slots**slot2,available_slots**slot3,available_slots**slot4,available_slots**slot5){
+	if((**slot1==freee)){
+		printf("1. 2pm to 2:30pm\n");
+	}
+	if((**slot2==freee)){
+		printf("2. 2:30pm to 3pm\n");
+	}
+	if((**slot3==freee)){
+		printf("3. 3pm to 3:30pm\n");
+	}
+	if((**slot4==freee)){
+		printf("4. 4pm to 4:30pm\n");
+	}
+	if((**slot5==freee)){
+		printf("5. 4:30pm to 5pm\n");
+	}
+}
+void available_slots_window(available_slots**slot1,available_slots**slot2,available_slots**slot3,available_slots**slot4,available_slots**slot5,int **slot){
+
+	if((**slot1==freee) && (**slot == 1)){
+		printf("1. 2pm to 2:30pm\n");
+		**slot1 = busy;
+	}
+	if((**slot2==freee) && (**slot == 2)){
+		printf("2. 2:30pm to 3pm\n");
+		**slot2 = busy;
+	}
+	if((**slot3==freee) && (**slot == 3)){
+		printf("3. 3pm to 3:30pm\n");
+		**slot3 = busy;
+	}
+	if((**slot4==freee) && (**slot == 4)){
+		printf("4. 4pm to 4:30pm\n");
+		**slot4 = busy;
+	}
+	if((**slot5==freee) && (**slot == 5)){
+		printf("5. 4:30pm to 5pm\n");
+		**slot5 = busy;
+	}
+}
+void Reserve_a_slot_with_the_doctor(available_slots*slot1,available_slots*slot2,available_slots*slot3,available_slots*slot4,available_slots*slot5,int *slot){
+	bool flag_id = false;
+	int id;
+	printf("Enter the id \n");
+	scanf("%d",&id);
+	check_id(id,&flag_id);
+	if(flag_id==false){
+		printf("\nincorrect ID message\n\n");
+		return;
+	}
+   if(head==NULL)
+   {
+	  return;
+   }
+   current = head;
+   while(current != NULL)
+   {
+	  if(current->id == id)
+	  {
+		 ALL_Slots(&slot1,&slot2,&slot3,&slot4,&slot5);
+		 printf("Enter Number of available slot \n");
+		 scanf("%d",&*slot);
+		 available_slots_window(&slot1,&slot2,&slot3,&slot4,&slot5,&slot);
+		 if(*slot==1){s1id=current->id;}
+		 if(*slot==2){s2id=current->id;}
+		 if(*slot==3){s3id=current->id;}
+		 if(*slot==4){s4id=current->id;}
+		 if(*slot==5){s5id=current->id;}
+		 current->desired_slot = *slot;
+		 return;
+	  }
+	  current = current->next;
+   }
+}
+void Cancel_reservation(void){
+	bool flag_id = false;
+	int id;
+	printf("Enter the id \n");
+	scanf("%d",&id);
+	check_id(id,&flag_id);
+	if(flag_id==false){
+		printf("\nincorrect ID message\n\n");
+		return;
+	}
+   if(head==NULL)
+   {
+	  return;
+   }
+   current = head;
+   while(current != NULL)
+   {
+	  if(current->id == id)
+	  {
+		 printf("The patient name is %s",current->name);
+		 printf("The Cancel done");
+		 if(s1id==current->id){s1id=0;slot1=freee;}
+		 if(s2id==current->id){s2id=0;slot2=freee;}
+		 if(s3id==current->id){s3id=0;slot3=freee;}
+		 if(s4id==current->id){s4id=0;slot4=freee;}
+		 if(s5id==current->id){s5id=0;slot5=freee;}
+		 return;
+	  }
+	  current = current->next;
+   }
+}
+
+void details_user(void){
+	bool flag_id = false;
+		int id;
+		printf("Enter the id \n");
+		scanf("%d",&id);
+		check_id(id,&flag_id);
+		if(flag_id==false){
+			printf("\nincorrect ID message\n\n");
+			return;
+		}
+	   if(head==NULL)
+	   {
+		  return;
+	   }
+	   current = head;
+	   while(current != NULL)
+	   {
+		  if(current->id == id)
+		  {
+			  printf("id : %d\n",current->id);
+			  printf("name : %s\n",current->name);
+			  printf("gender : %s\n",current->gender);
+			  printf("age : %d\n",current->age);
+			  current->desired_slot == -1? printf("NOT have a slot yet"):printf("slot number : %d\n",current->desired_slot);
+			 if(current->desired_slot==1){printf("1. 2pm to 2:30pm\n");}
+			 else if(current->desired_slot==2){printf("2. 2:30pm to 3pm\n");}
+			 else if(current->desired_slot==3){printf("3. 3pm to 3:30pm\n");}
+			 else if(current->desired_slot==4){printf("4. 4pm to 4:30pm\n");}
+			 else if(current->desired_slot==5){printf("5. 4:30pm to 5pm\n");}
+			 else{printf("not have slot yet");}
+			 return;
+		  }
+		  current = current->next;
+	   }
+}
+void View_todays_reservations(void){
+	 struct node *ptr = head;
+	 int vist = false;
+	   while(ptr!=NULL && ptr->desired_slot != freee)
+	   {
+		  if(current->desired_slot==1){printf("id : %d \t",ptr->id);printf("1. 2pm to 2:30pm\n");vist = true ;}
+		 else if(current->desired_slot==2){printf("id : %d \t",ptr->id);printf("2. 2:30pm to 3pm\n");vist = true ;}
+		 else if(current->desired_slot==3){printf("id : %d \t",ptr->id);printf("3. 3pm to 3:30pm\n");vist = true ;}
+		 else if(current->desired_slot==4){printf("id : %d \t",ptr->id);printf("4. 4pm to 4:30pm\n");vist = true ;}
+		 else if(current->desired_slot==5){printf("id : %d \t",ptr->id);printf("5. 4:30pm to 5pm\n");vist = true ;}
+	      ptr = ptr->next;
+	   }
+	   if(vist == false){
+			 printf("Not Reservation today");
+	   }
+}
+void delete_Patient(void){
+	   struct node * delete_node = NULL;
+	   struct node * prev = NULL;
+	   int id;
+	   printf("\n************Delete patient section************\n");
+	   	printf("Enter the id \n");
+	   	scanf("%d",&id);
+	   if(head==NULL)
+	   {
+		   printf("Wrong ID , NOT Found");
+		   return;
+	   }
+
+	   if(head->id == id)
+	   {
+		   delete_node = head;
+		   head = head->next;
+		   printf("%d Delete Successfully \n", id);
+		   free(delete_node);
+		   return;
+	   }
+
+	   current = head->next;
+	   prev = head;
+	   while(current != NULL)
+	   {
+		   if(current->id == id)
+		   {
+			   delete_node = current;
+			   prev->next = current->next;
+			   printf("%d Delete Successfully \n", id);
+			   free(delete_node);
+			   return;
+		   }
+		   prev = current;
+		   current = current->next;
+	   }
+
+	   if(delete_node == NULL)
+	   {
+		   printf("%d Wrong ID , NOT Found.",id);
+	   }
+}
+void user_mode(){
+	int mode1;
+	printf("\n****Welcome to User section**** \n");
+		printf("\n1. details_user \t2. View todays reservations\n");
+		scanf("%d",&mode1);
+		if(mode1==1){
+			details_user();
+		}else if(mode1==2){
+			View_todays_reservations();
+		}else{
+			printf("Incorrect Number");
+		}
+}
+void admin_mode(void){
+	int opreation,slot=0;
+	start_Screan_admin_mode();
+	printf("Enter Number of Opration \n");
+	scanf("%d",&opreation);
+	switch (opreation) {
+		case 1:
+			add_a_new_patient();
+			break;
+		case 2:
+			Edit_patient_record();
+			break;
+		case 3:
+			Reserve_a_slot_with_the_doctor(&slot1,&slot2,&slot3,&slot4,&slot5,&slot);
+			break;
+		case 4:
+			Cancel_reservation();
+			break;
+		case 5:
+			delete_Patient();
+			break;
+		default:
+			break;
+	}
+
+}
+int main(void) {
+	setvbuf(stdout, NULL, _IONBF, 0);
+	setvbuf(stderr, NULL, _IONBF, 0);
+	int mode;
+	for(;;){
+		printf("\n****Welcome to Our Clinc Managemnet System**** \n");
+		printf("\n1. Admin mode \t2. user mode\n");
+		scanf("%d",&mode);
+		if(mode==1){
+			admin_mode();
+		}else if(mode==2){
+			user_mode();
+		}else{
+			printf("Incorrect Number");
+		}
+	}
+}

@@ -1,0 +1,6 @@
+17:32:45 **** Incremental Build of configuration Debug for project Clinc_Managemnet_System ****
+Info: Internal Builder is used for build
+gcc -o Clinc_Managemnet_System.exe "src\\Clinc_Managemnet_System.o" 
+
+17:32:45 Build Finished. 0 errors, 0 warnings. (took 177ms)
+

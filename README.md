@@ -8,7 +8,8 @@ it is a Simple C Project Without GUI , to Simulate a Clinic Management System Us
 #  In admin mode : 
 
 The system asks for password, the default password is 1234. The system allows 3 trails for the password 
-entry, if the entered password was incorrect for 3 consecutive times
+entry, if the entered password was incorrect for 3 consecutive times, the system shall close. After login 
+in the admin mode, the system shall provide the following features:
 
 1. Add new patient record:
 
